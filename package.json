@@ -1,0 +1,35 @@
+{
+  "name": "react-hookrouter",
+  "version": "1.0.0",
+  "description": "Small router using React hooks",
+  "repository": "https://github.com/porfirioribeiro/react-hookrouter",
+  "author": "Porfirio Ribeiro<porfirioribeiro@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "source": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "exports": "./dist/react-hookrouter.modern.js",
+  "main": "./dist/react-hookrouter.cjs",
+  "module": "./dist/react-hookrouter.module.js",
+  "unpkg": "./dist/react-hookrouter.umd.js",
+  "umd:main": "./dist/react-hookrouter.umd.js",
+  "files": [
+    "dist"
+  ],
+  "mangle": {
+    "regex": "^_"
+  },
+  "scripts": {
+    "build": "microbundle",
+    "dev": "microbundle watch"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.16",
+    "microbundle": "^0.13.3",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
+  }
+}
