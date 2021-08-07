@@ -1,5 +1,6 @@
+import { Tab, Tablist } from 'evergreen-ui';
 import React from 'react';
-import { Link, redir, RouteObject, useRouter } from 'react-hookrouter';
+import { Link, redir, RouteObject, useRouter, useRouterEx } from 'react-hookrouter';
 import { Project } from './Project';
 
 const routes: RouteObject = {
@@ -9,13 +10,17 @@ const routes: RouteObject = {
 };
 
 export function About() {
-  const match = useRouter(routes);
+  const [route, match] = useRouterEx(routes);
   return (
     <>
-      <div>
-        <Link to="me">Me</Link>
-        <Link to="project">Project</Link>
-      </div>
+      <Tablist>
+        <Link to="me">
+          <Tab isSelected={route?.segment === '/me'}>Me</Tab>
+        </Link>
+        <Link to="project">
+          <Tab isSelected={route?.segment === '/project'}>Project</Tab>
+        </Link>
+      </Tablist>
       {match}
     </>
   );

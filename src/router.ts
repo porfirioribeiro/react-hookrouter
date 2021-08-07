@@ -123,6 +123,7 @@ export function Redirect({ to, replace, state }: { to: string; replace?: boolean
 
 export const RouterContext = createContext<RouterCtx>({
   basePath: '',
+  segment: '',
   resolve,
   navigate,
   goBack,
@@ -134,7 +135,10 @@ export function useMatch<P>() {
   return useContext(RouterContext) as RouterCtx<P>;
 }
 
-export function useRouter<P>(routes: RouteObject<P>, props?: P): ReactElement | null {
+export function useRouterEx<P>(
+  routes: RouteObject<P>,
+  props?: P,
+): [RouterCtx<P>, ReactElement] | [] {
   const parentRoute = useContext(RouterContext);
   const [uri, setUri] = useState(getPath);
   const isRoot = parentRoute.uri === undefined;
@@ -148,21 +152,28 @@ export function useRouter<P>(routes: RouteObject<P>, props?: P): ReactElement | 
 
     if (route) {
       setMathPath(matchPath);
-      return createElement(
-        RouterContext.Provider,
-        { value: route },
+      return [
+        route,
         createElement(
-          routes[key],
-          Object.assign({}, props, route.params, {
-            navigate: route.navigate,
-            route,
-          }),
+          RouterContext.Provider,
+          { value: route },
+          createElement(
+            routes[key],
+            Object.assign({}, props, route.params, {
+              navigate: route.navigate,
+              route,
+            }),
+          ),
         ),
-      );
+      ];
     }
   }
 
-  return null;
+  return [];
+}
+
+export function useRouter<P>(routes: RouteObject<P>, props?: P): ReactElement | null {
+  return useRouterEx(routes, props)[1]!;
 }
 
 // Navigation Events

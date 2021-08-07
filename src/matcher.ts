@@ -7,7 +7,7 @@ export const cachedMatches: Record<string, RouterCtx<any> | null> = {};
 export function doMatch<P extends any>(
   path: string,
   currentUri: string,
-  parent?: RouterCtx<P>,
+  parent: RouterCtx<P>,
 ): RouterCtx<P> | null {
   const [re, props, basePath] = pathToRe(path);
 
@@ -17,11 +17,14 @@ export function doMatch<P extends any>(
   const uri = uriMatch.shift()!;
   const pathname = uriMatch.shift() || '/';
 
+  const segment = pathname.replace(parent.pathname, '');
+
   return {
     basePath,
     uri, // matched uri
     pathname,
     parent,
+    segment,
     params: props.reduce((acc, p) => Object.assign(acc, { [p]: uriMatch.shift() }), {}) as P,
     resolve: to => resolve(to, pathname),
     navigate: (to, replace, state, noInterception) =>
@@ -36,7 +39,7 @@ export function doMatch<P extends any>(
 export function matcher<P extends any>(
   path: string,
   uri: string,
-  parent?: RouterCtx<P>,
+  parent: RouterCtx<P>,
 ): RouterCtx<P> | null {
   const key = `${path}__${uri}`;
   return key in cachedMatches

@@ -11,6 +11,8 @@ export interface RouterCtx<P extends any = any> {
   pathname: string;
   /** base path to match */
   basePath: string;
+  /** segment matched */
+  segment: string;
   /** matched params */
   params: P;
   /** The parent route match */
