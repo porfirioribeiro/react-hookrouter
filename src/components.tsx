@@ -2,7 +2,7 @@ import React from 'react';
 import { navigate, RouterContext } from './router';
 
 interface LinkProps<S = {}> {
-  to: string;
+  to: -1 | string;
   replace?: boolean;
   state?: S;
 }
@@ -30,7 +30,7 @@ export const Link = React.forwardRef(
 
 export function useLink<S = {}>({ to, replace, state }: LinkProps<S>) {
   const router = React.useContext(RouterContext);
-  const href = router.resolve(to);
+  const href = to === -1 ? router.parent?.pathname ?? '' : router.resolve(to);
 
   return {
     href,
@@ -39,7 +39,7 @@ export function useLink<S = {}>({ to, replace, state }: LinkProps<S>) {
     onClick(e: React.MouseEvent) {
       if (!e.ctrlKey && !e.metaKey) {
         e.preventDefault();
-        navigate(href, replace, state);
+        to === -1 ? router.goBack() : navigate(href, replace, state);
       }
     },
   };

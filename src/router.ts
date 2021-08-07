@@ -96,14 +96,10 @@ export function resolve(to: string, base = '/') {
   return `${basePath}/${segments.join('/')}`;
 }
 
-/**
- * Try to go back
- * @todo This should probably be removed
- * @see {RouterCtx.backTo}
- */
-export function goBack() {
+/** Root router go back */
+function goBack() {
   if (history.state && history.state._prev) history.back();
-  else navigate(resolve('..', currentPath.replace(basePathReplacer, '')), true);
+  else navigate(basePath, true);
 }
 
 /**
